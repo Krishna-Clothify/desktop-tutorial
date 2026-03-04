@@ -129,6 +129,7 @@ const refreshClothes = useCallback(() => {
 
 return (
   <div className="space-y-6">
+  <div className="products-grid"></div>
 
     {/* HERO */}
     <div className="hero">

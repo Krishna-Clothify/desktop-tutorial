@@ -86,22 +86,67 @@ exports.getAll = async (req, res) => {
 
 
 exports.getOne = async (req, res) => {
-  const cloth = await Clothes.findById(req.params.id);
-  res.json(cloth);
+  try {
+    const cloth = await Clothes.findById(req.params.id).lean();
+    if (!cloth) return res.status(404).json({ message: "Not found" });
+
+    // ---- Availability logic same as getAll ----
+    const now = new Date();
+    const soonThreshold = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+
+    const rental = await Rentals.findOne({
+      clothesId: cloth._id,
+      status: { $ne: "returned" }
+    });
+
+    let status = "available";
+    let returnDate = null;
+
+    if (rental) {
+      returnDate = rental.endDate;
+
+      if (new Date(rental.endDate) <= soonThreshold)
+        status = "returning_soon";
+      else
+        status = "rented";
+    }
+
+    res.json({
+      ...cloth,
+      status,
+      returnDate
+    });
+
+  } catch (err) {
+    console.error("GET ONE ERROR:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 exports.create = async (req, res) => {
-  const { name, pricePerDay, sizes } = req.body;
+  try {
+    const { name, pricePerDay, type, fitProfile, availableSizes } = req.body;
 
-  const cloth = await Clothes.create({
-    name,
-    pricePerDay,
-    image: `/uploads/${req.file.filename}`,
-    available: true,
-    availableSizes: JSON.parse(sizes)
-  });
+    let parsedSizes = [];
+    if (availableSizes) {
+      parsedSizes = JSON.parse(availableSizes);
+    }
 
-  res.json(cloth);
+    const cloth = await Clothes.create({
+      name,
+      pricePerDay,
+      type,
+      fitProfile,
+      image: req.file ? `/uploads/${req.file.filename}` : "",
+      available: true,
+      availableSizes: parsedSizes
+    });
+
+    res.json(cloth);
+  } catch (err) {
+    console.error("CREATE CLOTH ERROR:", err);
+    res.status(500).json({ message: "Failed to create cloth" });
+  }
 };
 
 exports.remove = async (req, res) => {

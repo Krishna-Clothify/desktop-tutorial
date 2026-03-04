@@ -1,88 +1,75 @@
-import { Link } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import api from "../services/api";
-import { addToCart } from '../features/cartSlice';
-import { rentCloth } from "../services/rentalService";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cartSlice";
 
 function Productcard({ item, refreshClothes }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const isAdmin = () => {
-    try {
-      const payload = JSON.parse(atob(localStorage.getItem("token").split(".")[1]));
-      return payload.role === "admin";
-    } catch {
-      return false;
-    }
-  };
-
+  // ---------- RENT ----------
   const handleRent = async () => {
-    try {
-      await rentCloth(item._id, 2);
-      alert("Rental successful!");
-      refreshClothes();
-    } catch (err) {
-      alert(err.response?.data?.message || "Something went wrong");
-    }
+    navigate(`/cloth/${item._id}`);
+    refreshClothes();
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm("Delete this cloth?")) return;
-
-    try {
-      await api.delete(`/clothes/${item._id}`);
-      alert("Deleted");
-      refreshClothes();
-    } catch {
-      alert("Not allowed");
-    }
-  };
-
+  // ---------- STATUS ----------
   const getStatusInfo = () => {
-  if (item.status === "available")
-    return { label: "Available", className: "status-badge status-available", canRent: true };
+    if (item.status === "available")
+      return { label: "Available", className: "status-available", canRent: true };
 
-  if (item.status === "returning_soon")
-    return { label: "Returning Soon", className: "status-badge status-returning", canRent: false };
+    if (item.status === "returning_soon")
+      return { label: "Returning Soon", className: "status-returning", canRent: false };
 
-  return { label: "Rented", className: "status-badge status-rented", canRent: false };
-};
+    return { label: "Rented", className: "status-rented", canRent: false };
+  };
 
-const statusInfo = getStatusInfo();
+  const statusInfo = getStatusInfo();
 
   return (
-<div className="relative">
-  <img
-    src={`http://localhost:5000${item.image}`}
-    alt={item.name}
-    className="product-image"
-  />
-  <span className={statusInfo.className}>
-    {statusInfo.label}
-  </span>
+    <div className="product-card">
 
-      <h2 className="product-title">{item.name}</h2>
-      <p className="product-price">₹{item.pricePerDay}/day</p>
+      {/* IMAGE → ALWAYS GOES TO DETAILS PAGE */}
+      <Link to={`/cloth/${item._id}`} className="product-media">
+        <div className="product-image-wrapper">
+          <img
+            src={`http://localhost:5000${item.image}`}
+            alt={item.name}
+            loading="lazy"
+          />
+        </div>
 
-      <div className="product-actions">
-        <button onClick={() => dispatch(addToCart(item))} className="btn-brand">
+        <span className={`product-badge ${statusInfo.className}`}>
+          {statusInfo.label}
+        </span>
+      </Link>
+
+      {/* PRODUCT INFO */}
+      <div className="product-info">
+
+        <h2 className="product-title">{item.name}</h2>
+
+        <p className="product-desc">
+          Premium rental outfit • Perfect for occasions
+        </p>
+
+        <p className="product-price">₹{item.pricePerDay}/day</p>
+
+        {/* ACTION BUTTONS */}
+        <button
+          onClick={() => dispatch(addToCart(item))}
+          className="primary-action"
+        >
           Add to Cart
         </button>
 
         <button
           onClick={handleRent}
           disabled={!statusInfo.canRent}
-          className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
+          className="secondary-action"
         >
           {statusInfo.canRent ? "Rent Now" : statusInfo.label}
         </button>
 
-        {isAdmin() && (
-          <button onClick={handleDelete} className="btn-danger">
-            Delete
-          </button>
-        )}
       </div>
     </div>
   );

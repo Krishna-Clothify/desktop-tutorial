@@ -11,14 +11,8 @@ app.use("/uploads", express.static("uploads"));
 
 
 mongoose.connect(process.env.MONGODB_URI)
-mongoose.connection.once("open", async () => {
+mongoose.connection.once("open", () => {
   console.log("MongoDB Connected");
-
-  // TEMP: reset availability for testing
-  await mongoose.connection.collection("clothes")
-    .updateMany({}, { $set: { available: true } });
-
-  console.log("Availability reset");
 });
 
 app.use('/api/auth', require('./routes/authRoutes'));

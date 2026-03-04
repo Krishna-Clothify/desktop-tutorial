@@ -8,7 +8,6 @@ function Layout({ children }) {
     <div className="min-h-screen flex flex-col">
       <Header />
       <CategoryBar />
-      <main className="page-shell flex-1"></main>
       <main className="page-shell flex-1 pt-4">
         {children}
       </main>

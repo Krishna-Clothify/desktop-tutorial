@@ -1,37 +1,40 @@
-const router = require('express').Router();
-const controller = require('../controllers/rentalController');
-const Rental = require("../models/Rental");
-const Clothes = require("../models/Clothes");
-const auth = require('../middleware/authMiddleware');
+const router = require("express").Router();
+const {
+  createRental,
+  checkoutCart,
+  myRentals,
+  returnCloth,
+  getBookedDates,
+  getAllRentals
+} = require("../controllers/rentalController");
 
-router.post('/', auth, controller.rentCloth);
-router.post('/checkout', auth, controller.checkoutCart);
-router.get('/my', auth, controller.myRentals);
-router.put("/return/:id", auth, async (req, res) => {
-  try {
-    const rental = await Rental.findById(req.params.id);
+const auth = require("../middleware/authMiddleware");
+const admin = require("../middleware/adminMiddleware");
 
-    if (!rental) {
-      return res.status(404).json({ message: "Rental not found" });
-    }
+// Create single rental (date-based)
+router.post("/", auth, createRental);
 
-    rental.status = "returned";
-    await rental.save();
+// Checkout cart
+router.post("/checkout", auth, checkoutCart);
 
-    // make cloth available again
-    await Clothes.findByIdAndUpdate(rental.clothesId, { available: true });
+// Get my rentals
+router.get("/my", auth, myRentals);
 
-    res.json({ message: "Item returned" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
+// Return item
+router.put("/return/:id", auth, returnCloth);
 
+router.get("/admin/all", auth, admin, getAllRentals);
+
+router.get("/booked/:clothesId", auth, getBookedDates);
+
+// Clear returned history
 router.delete("/clear-history", auth, async (req, res) => {
   try {
+    const Rental = require("../models/Rental");
+
     await Rental.deleteMany({
-      userId: req.user.id,
-      status: "returned"
+      status: "returned",
+      userId: req.user._id
     });
 
     res.json({ message: "History cleared" });
@@ -39,6 +42,5 @@ router.delete("/clear-history", auth, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 module.exports = router;

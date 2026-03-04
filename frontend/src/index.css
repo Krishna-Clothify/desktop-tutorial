@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -21,6 +20,7 @@
     overflow-x: hidden;
     font-family: "Manrope", sans-serif;
     color: var(--ink);
+    font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     background:
       radial-gradient(circle at 12% 20%, rgba(231, 146, 46, 0.16), transparent 30%),
       radial-gradient(circle at 88% 0%, rgba(15, 138, 120, 0.15), transparent 34%),
@@ -40,10 +40,9 @@
     @apply rounded-xl backdrop-blur-sm;
   }
 
-  .title-serif {
-    font-family: "Fraunces", serif;
-    letter-spacing: 0.01em;
-  }
+.title-serif {
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+}
 
   .btn-brand {
     background: var(--brand);
@@ -211,10 +210,6 @@
 
     .product-card {
     @apply surface p-4 transition-transform hover:-translate-y-0.5;
-    }
-
-    .product-image {
-    @apply w-full h-52 object-cover rounded-lg mb-3;
     }
 
     .product-price {
@@ -431,6 +426,802 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
 
+@layer components {
 
+/* CARD */
+  .product-card {
+    @apply block bg-white rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-lg;
+  }
+
+  /* IMAGE AREA */
+  .product-media {
+    @apply relative w-full aspect-[3/4] bg-gray-100;
+  }
+
+  .product-image-wrapper {
+    @apply absolute inset-0 flex items-center justify-center p-3;
+  }
+
+  .product-image-wrapper img {
+    @apply max-h-full max-w-full object-contain transition duration-300;
+  }
+
+  .product-card:hover .product-image-wrapper img {
+    transform: scale(1.05);
+  }
+
+  /* OVERLAY */
+  .product-overlay {
+    @apply absolute inset-0 bg-black/0 transition;
+  }
+
+  .product-card:hover .product-overlay {
+    @apply bg-black/10;
+  }
+
+  /* BADGE */
+  .product-badge {
+    @apply absolute top-2 left-2 text-xs px-2 py-1 rounded-full font-medium capitalize;
+  }
+
+  .status-available { @apply bg-green-100 text-green-700; }
+  .status-returning_soon { @apply bg-yellow-100 text-yellow-700; }
+  .status-rented { @apply bg-red-100 text-red-700; }
+
+  /* INFO */
+  .product-info {
+    @apply p-3 space-y-1;
+  }
+
+  .product-category {
+    @apply text-xs text-gray-500 uppercase tracking-wide;
+  }
+
+  .product-title {
+    @apply font-medium text-gray-800 truncate;
+  }
+
+  .product-bottom {
+    @apply flex items-center justify-between pt-1;
+  }
+
+  .product-price {
+    @apply font-semibold text-gray-900;
+  }
+
+  .product-view {
+    @apply text-xs text-gray-400 transition;
+  }
+
+  .product-card:hover .product-view {
+    @apply text-black;
+  }
+
+}
+
+@layer components {
+
+  /* CARD CONTAINER */
+    .product-card {
+      @apply bg-white rounded-2xl overflow-hidden border transition duration-300;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      @apply shadow-xl;
+    }
+
+    /* IMAGE AREA */
+    .product-media {
+      @apply relative w-full aspect-[3/4] bg-gray-50 cursor-pointer block;
+    }
+
+    .product-image-wrapper {
+      @apply absolute inset-0 flex items-center justify-center p-3;
+    }
+
+    .product-image-wrapper img {
+      @apply max-h-full max-w-full object-contain transition duration-300;
+    }
+
+    .product-card:hover .product-image-wrapper img {
+      transform: scale(1.06);
+    }
+
+    /* STATUS BADGE */
+    .product-badge {
+      @apply absolute top-2 left-2 text-xs px-2 py-1 rounded-full font-medium capitalize;
+    }
+
+    .status-available { @apply bg-green-100 text-green-700; }
+    .status-returning { @apply bg-yellow-100 text-yellow-700; }
+    .status-rented { @apply bg-red-100 text-red-700; }
+
+    /* INFO */
+    .product-info {
+      @apply p-3 space-y-1;
+    }
+
+    .product-title {
+      @apply font-semibold text-gray-900 text-sm leading-tight line-clamp-1;
+    }
+
+    .product-desc {
+      @apply text-xs text-gray-500 mt-1 line-clamp-2;
+    }
+
+    .product-price {
+      @apply text-base font-bold text-gray-900 mt-2;
+    }
+
+    /* PRIMARY BUTTON */
+    .primary-action {
+      @apply w-full mt-3 py-2 rounded-lg bg-black text-white text-sm font-medium transition;
+    }
+    .primary-action:hover {
+      @apply bg-gray-800;
+    }
+
+    /* SECONDARY BUTTON */
+    .secondary-action {
+      @apply w-full mt-2 py-2 rounded-lg border border-gray-300 text-sm font-medium transition bg-white;
+    }
+    .secondary-action:hover:not(:disabled) {
+      @apply border-black text-black;
+    }
+    .secondary-action:disabled {
+      @apply opacity-50 cursor-not-allowed;
+    }
+
+    /* ADMIN PANEL */
+    .product-admin-actions {
+      @apply mt-3 pt-2 border-t animate-fadeIn;
+    }
+
+    .delete-btn {
+      @apply w-full py-2 rounded-lg bg-red-500 text-white text-sm font-medium transition;
+    }
+    .delete-btn:hover {
+      @apply bg-red-600;
+    }
+
+    /* ANIMATION */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn .25s ease; 
+    }
+
+  }
+
+  @layer components {
+
+    .products-grid {
+      @apply grid gap-4 px-3;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 640px) {
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 768px) {
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+
+  }
+
+  @layer components {
+
+  .details-page {
+    @apply max-w-6xl mx-auto p-4 grid gap-8;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .details-page { grid-template-columns: 1.1fr 1fr; }
+  }
+
+  .details-gallery {
+    @apply bg-gray-50 rounded-2xl flex items-center justify-center p-6;
+  }
+  .details-gallery img {
+    @apply max-h-[520px] object-contain;
+  }
+
+  .details-panel { @apply space-y-6; }
+
+  .details-title { @apply text-2xl font-semibold; }
+
+  .details-price-row { @apply flex items-end gap-2; }
+  .price { @apply text-3xl font-bold; }
+  .perday { @apply text-gray-500; }
+
+  .availability { @apply text-sm font-medium; }
+  .availability.available { @apply text-green-600; }
+  .availability.rented { @apply text-red-600; }
+  .availability.returning_soon { @apply text-yellow-600; }
+
+  .section h3 { @apply font-medium mb-2; }
+
+  .size-options { @apply flex flex-wrap gap-2; }
+  .size-chip {
+    @apply border px-3 py-2 rounded-lg text-sm transition;
+  }
+  .size-chip:hover { @apply border-black; }
+  .size-chip.active { @apply bg-black text-white border-black; }
+
+  .day-stepper {
+    @apply flex items-center gap-4 border rounded-lg w-fit px-3 py-2;
+  }
+  .day-stepper button { @apply text-xl px-2; }
+
+  .total-box { @apply bg-gray-100 rounded-xl p-4 text-sm; }
+  .total { @apply text-2xl font-bold mt-1; }
+
+  .rent-main-btn {
+    @apply w-full py-3 rounded-xl bg-black text-white font-medium;
+  }
+
+  .rent-main-btn:disabled 
+  {
+    @apply bg-gray-300 cursor-not-allowed; 
+  }
+
+}
+
+@layer components {
+
+  .measurement-box {
+    @apply bg-gray-50 rounded-xl p-4 space-y-3;
+  }
+
+  .measurement-set {
+    @apply space-y-1;
+  }
+
+  .measurement-row {
+    @apply flex justify-between text-sm border-b pb-1 last:border-none;
+  }
+
+  .measurement-row .label {
+    @apply text-gray-500 capitalize;
+  }
+
+  .measurement-row .value {
+    @apply font-medium;
+  }
+
+}
+
+@layer components {
+
+  .details-layout {
+    @apply max-w-6xl mx-auto grid gap-12 p-6;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .details-layout {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .details-left {
+    @apply bg-white rounded-2xl p-8 flex items-center justify-center shadow-sm;
+  }
+
+  .details-left img {
+    @apply max-h-[600px] object-contain;
+  }
+
+  .details-right {
+    @apply space-y-6;
+  }
+
+  .booked-list {
+    @apply bg-red-50 border border-red-200 rounded-xl p-3 space-y-2;
+  }
+
+  .booked-row {
+    @apply text-sm text-red-700;
+  }
+
+}
+
+@layer components {
+  .pdp-page {
+    @apply max-w-6xl mx-auto px-4 py-6 grid gap-5;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    .pdp-page {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(300px, 360px);
+      align-items: start;
+    }
+  }
+
+  .pdp-media {
+    @apply p-5 md:p-8 flex items-center justify-center rounded-2xl;
+  }
+
+  .pdp-media img {
+    @apply max-h-[520px] w-full object-contain;
+  }
+
+  .pdp-main {
+    @apply space-y-5;
+  }
+
+  .pdp-head,
+  .pdp-card {
+    @apply p-5 rounded-2xl;
+  }
+
+  .pdp-overline {
+    @apply uppercase tracking-wide text-xs text-gray-500 mb-2;
+  }
+
+  .pdp-title {
+    @apply text-2xl md:text-3xl font-semibold leading-tight;
+  }
+
+  .pdp-price-row {
+    @apply flex items-end gap-2 mt-3;
+  }
+
+  .pdp-price {
+    @apply text-3xl font-bold;
+  }
+
+  .pdp-price-sub {
+    @apply text-gray-500 pb-1;
+  }
+
+  .pdp-status {
+    @apply mt-4 rounded-xl px-3 py-2 flex flex-col;
+  }
+
+  .pdp-status span {
+    @apply text-sm font-semibold;
+  }
+
+  .pdp-status small {
+    @apply text-xs opacity-90;
+  }
+
+  .pdp-status-available {
+    @apply bg-emerald-50 text-emerald-800 border border-emerald-200;
+  }
+
+  .pdp-status-returning {
+    @apply bg-amber-50 text-amber-800 border border-amber-200;
+  }
+
+  .pdp-status-rented {
+    @apply bg-red-50 text-red-800 border border-red-200;
+  }
+
+  .pdp-return-note {
+    @apply mt-3 text-sm text-gray-600;
+  }
+
+  .pdp-card-title {
+    @apply text-lg font-semibold mb-3;
+  }
+
+  .pdp-measure-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-2;
+  }
+
+  .pdp-measure-item {
+    @apply bg-white border border-black/10 rounded-lg px-3 py-2 flex items-center justify-between text-sm;
+  }
+
+  .pdp-booked-list {
+    @apply space-y-2;
+  }
+
+  .pdp-booked-row {
+    @apply text-sm rounded-lg bg-rose-50 border border-rose-100 px-3 py-2 flex items-center justify-between gap-2;
+  }
+
+  .pdp-booking {
+    @apply p-5 rounded-2xl h-fit lg:sticky lg:top-24;
+  }
+
+  .pdp-booking h3 {
+    @apply text-lg font-semibold mb-4;
+  }
+
+  .pdp-date-grid {
+    @apply space-y-3;
+  }
+
+  .date-input {
+    @apply w-full border border-black/15 rounded-lg px-3 py-2 bg-white;
+  }
+
+  .pdp-summary {
+    @apply mt-4 p-3 rounded-lg bg-gray-50 border border-black/10 space-y-2;
+  }
+
+  .pdp-summary div {
+    @apply flex items-center justify-between text-sm;
+  }
+
+  .pdp-admin-row {
+    @apply mt-3 border-t border-black/10 pt-3;
+  }
+
+  .delete-product-btn {
+    @apply w-full rounded-lg bg-red-600 text-white font-semibold py-2 hover:bg-red-700 transition;
+  }
+
+  .pdp-admin-note {
+    @apply text-xs text-gray-500 mt-2;
+  }
+
+  .pdp-trust {
+    @apply p-5 rounded-2xl grid gap-3;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .pdp-trust {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .pdp-trust h4 {
+    @apply font-semibold mb-1;
+  }
+
+  .pdp-trust p {
+    @apply text-sm text-gray-600;
+  }
+}
+
+@layer components {
+  .adminx-page {
+    @apply max-w-6xl mx-auto px-4 py-6;
+  }
+
+  .adminx-grid {
+    @apply grid gap-5;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    .adminx-grid {
+      grid-template-columns: 1.15fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .adminx-panel {
+    @apply rounded-2xl p-5 md:p-6;
+  }
+
+  .adminx-head p {
+    @apply text-sm text-gray-600 mt-1;
+  }
+
+  .adminx-form {
+    @apply mt-4 space-y-4;
+  }
+
+  .adminx-form-row {
+    @apply grid gap-3;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    .adminx-form-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .adminx-size-grid {
+    @apply grid gap-2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 640px) {
+    .adminx-size-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .adminx-preview {
+    @apply rounded-xl overflow-hidden border border-black/10 bg-white;
+  }
+
+  .adminx-preview img {
+    @apply w-full max-h-64 object-contain;
+  }
+
+  .adminx-stats {
+    @apply mt-4 grid grid-cols-3 gap-2;
+  }
+
+  .adminx-stat {
+    @apply rounded-xl border border-black/10 bg-white p-3 text-center;
+  }
+
+  .adminx-stat span {
+    @apply text-xs text-gray-600 uppercase tracking-wide;
+  }
+
+  .adminx-stat strong {
+    @apply block text-xl font-bold mt-1;
+  }
+
+  .adminx-rental-list {
+    @apply mt-4 space-y-3 max-h-[640px] overflow-y-auto pr-1;
+  }
+
+  .adminx-rental-card {
+    @apply rounded-xl border border-black/10 bg-white p-4;
+  }
+
+  .adminx-rental-head {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  .adminx-rental-head h4 {
+    @apply font-semibold text-gray-900;
+  }
+
+  .adminx-status {
+    @apply text-xs px-2 py-1 rounded-full font-semibold capitalize;
+  }
+
+  .adminx-active {
+    @apply bg-emerald-100 text-emerald-700;
+  }
+
+  .adminx-returned {
+    @apply bg-gray-200 text-gray-700;
+  }
+
+  .adminx-rental-meta {
+    @apply mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700;
+  }
+
+  .adminx-rental-meta span {
+    @apply font-semibold text-gray-800;
+  }
+}
+
+@layer components {
+  .pdp-page {
+    @apply max-w-6xl mx-auto px-4 py-6 grid gap-5;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1100px) {
+    .pdp-page {
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 380px);
+      align-items: start;
+    }
+  }
+
+  .pdp-main {
+    @apply space-y-5;
+  }
+
+  .pdp-head,
+  .pdp-media,
+  .pdp-card,
+  .pdp-booking,
+  .pdp-trust,
+  .pdp-related {
+    @apply rounded-2xl;
+  }
+
+  .pdp-breadcrumbs {
+    @apply flex items-center gap-2 text-xs text-gray-500 mb-3;
+  }
+
+  .pdp-breadcrumbs a:hover {
+    @apply text-gray-800;
+  }
+
+  .pdp-rating {
+    @apply mt-3 flex items-center gap-2 text-sm text-gray-600;
+  }
+
+  .pdp-stars {
+    @apply text-amber-500 tracking-wide;
+  }
+
+  .pdp-strike {
+    @apply text-sm line-through text-gray-400 pb-1;
+  }
+
+  .pdp-save {
+    @apply text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-semibold;
+  }
+
+  .pdp-media {
+    @apply p-6 bg-gradient-to-b from-white to-gray-50;
+  }
+
+  .pdp-list {
+    @apply space-y-2 text-sm text-gray-700;
+  }
+
+  .pdp-list li {
+    @apply flex items-start gap-2;
+  }
+
+  .pdp-list li::before {
+    content: "•";
+    @apply text-emerald-600 font-bold;
+  }
+
+  .pdp-book-note {
+    @apply text-xs text-gray-600 mb-3;
+  }
+
+  .pdp-cart-msg {
+    @apply mt-2 text-sm text-emerald-700 font-semibold;
+  }
+
+  .pdp-policy {
+    @apply mt-4 border border-black/10 rounded-xl p-3 bg-gray-50;
+  }
+
+  .pdp-policy h4 {
+    @apply font-semibold text-sm mb-2;
+  }
+
+  .pdp-policy p {
+    @apply text-xs text-gray-600 mb-1 last:mb-0;
+  }
+
+  .pdp-related {
+    @apply p-4;
+    grid-column: 1 / -1;
+  }
+
+  .pdp-related-head {
+    @apply flex items-center justify-between mb-3;
+  }
+
+  .pdp-related-head h3 {
+    @apply font-semibold text-lg;
+  }
+
+  .pdp-related-head a {
+    @apply text-sm font-semibold text-teal-700;
+  }
+
+  .pdp-related-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3;
+  }
+
+  .pdp-mini-card {
+    @apply border border-black/10 rounded-xl p-3 bg-white hover:shadow-sm transition;
+  }
+
+  .pdp-mini-card img {
+    @apply w-full h-40 object-contain mb-2;
+  }
+
+  .pdp-mini-card p {
+    @apply text-sm text-gray-700 line-clamp-1;
+  }
+
+  .pdp-mini-card strong {
+    @apply text-sm font-semibold;
+  }
+
+  .adminx-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 768px) {
+    .adminx-stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .adminx-toolbar {
+    @apply mt-4 space-y-2;
+  }
+
+  .adminx-segments {
+    @apply inline-flex rounded-lg border border-black/10 bg-white p-1 gap-1;
+  }
+
+  .adminx-segment {
+    @apply text-xs px-3 py-1 rounded-md font-semibold text-gray-600 transition;
+  }
+
+  .adminx-segment.active {
+    @apply bg-black text-white;
+  }
+
+  .pdp-quick-days {
+    @apply grid grid-cols-3 gap-2 mb-3;
+  }
+
+  .pdp-quick-days button {
+    @apply text-xs font-semibold border border-black/15 rounded-lg px-2 py-2 bg-white hover:border-black transition;
+  }
+
+  .pdp-selected-range {
+    @apply mt-3 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm flex items-center justify-between gap-2;
+  }
+
+  .pdp-booking-error {
+    @apply mt-2 text-sm text-red-600 font-medium;
+  }
+
+  .pdp-reviews {
+    @apply p-4;
+    grid-column: 1 / -1;
+  }
+
+  .pdp-reviews-head {
+    @apply mb-3;
+  }
+
+  .pdp-reviews-head h3 {
+    @apply font-semibold text-lg;
+  }
+
+  .pdp-reviews-head p {
+    @apply text-sm text-gray-600;
+  }
+
+  .pdp-reviews-grid {
+    @apply grid gap-3;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .pdp-reviews-grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  .pdp-review-list {
+    @apply space-y-2 max-h-96 overflow-y-auto pr-1;
+  }
+
+  .pdp-review-card {
+    @apply border border-black/10 rounded-xl bg-white p-3;
+  }
+
+  .pdp-review-top {
+    @apply flex items-center justify-between gap-2 text-sm mb-1;
+  }
+
+  .pdp-review-card p {
+    @apply text-sm text-gray-700;
+  }
+
+  .pdp-review-card small {
+    @apply text-xs text-gray-500;
+  }
+
+  .pdp-review-form {
+    @apply border border-black/10 rounded-xl bg-white p-3 space-y-2 h-fit;
+  }
+
+  .pdp-review-form h4 {
+    @apply font-semibold;
+  }
 }

@@ -4,16 +4,15 @@ const api = axios.create({
   baseURL: "http://localhost:5000/api"
 });
 
-api.interceptors.request.use((req) => {
+// 🔥 Attach token automatically
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-    
-  console.log("INTERCEPTOR RUNNING, TOKEN =", token);
 
   if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  return req;
+  return config;
 });
 
 export default api;

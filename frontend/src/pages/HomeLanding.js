@@ -4,7 +4,6 @@ import { getClothes } from "../services/clothService";
 import Productcard from "../components/Productcard";
 
 function HomeLanding() {
-  const [items, setItems] = useState([]);
   const [trending, setTrending] = useState([]);
 
 
