@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cartSlice";
-
-// backend URL (Render)
-const BACKEND_URL = "https://clothify-wb4m.onrender.com";
+import { resolveMediaUrl, resolvePrimaryImage } from "../utils/media";
 
 function Productcard({ item, refreshClothes }) {
   const dispatch = useDispatch();
@@ -40,13 +38,7 @@ function Productcard({ item, refreshClothes }) {
 
   const statusInfo = getStatusInfo();
 
-  // handle single image or images array
-  const cardImage =
-    (Array.isArray(item.images) && item.images[0]) || item.image;
-
-  const imageUrl = cardImage
-    ? `${BACKEND_URL}/uploads/${cardImage}`
-    : "/placeholder.png";
+  const imageUrl = resolveMediaUrl(resolvePrimaryImage(item));
 
   return (
     <div className="product-card">
@@ -56,6 +48,10 @@ function Productcard({ item, refreshClothes }) {
             src={imageUrl}
             alt={item.name}
             loading="lazy"
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = resolveMediaUrl("");
+            }}
           />
         </div>
 

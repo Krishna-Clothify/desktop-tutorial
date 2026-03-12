@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Productcard from "../components/Productcard";
 import { getClothes } from "../services/clothService";
 
-function Home() {
+function Shop() {
   const sizeOptions = ["chest", "waist", "shoulder", "hips", "length"];
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -128,32 +128,36 @@ const refreshClothes = useCallback(() => {
   };
 
 return (
-  <div className="space-y-6">
-  <div className="products-grid"></div>
-
-    {/* HERO */}
-    <div className="hero">
-      <div className="hero-inner">
-        <p className="hero-eyebrow">Everyday Rental Edit</p>
-        <h1 className="hero-title">Clothify Rentals</h1>
-        <p className="hero-subtext">
-          Browse premium outfits, filter by fit and budget, and place your order in minutes.
+  <div className="shopx-page">
+    <section className="shopx-hero">
+      <div className="shopx-hero-copy">
+        <p className="shopx-kicker">Premium Rental Catalog</p>
+        <h1 className="title-serif">Find your next event-ready fit in minutes.</h1>
+        <p>
+          Discover curated designer rentals with transparent pricing, sizing filters, and fast booking flow.
         </p>
       </div>
-    </div>
+      <div className="shopx-hero-stats">
+        <article><strong>{totalItems || "500+"}</strong><span>Active Listings</span></article>
+        <article><strong>4.9/5</strong><span>Rated Experience</span></article>
+        <article><strong>48h</strong><span>Avg Delivery Cycle</span></article>
+      </div>
+    </section>
 
-    {/* MAIN */}
-    <div className="home-layout">
-
-      {/* SIDEBAR */}
-      <aside className="sidebar">
-        <h2 className="title-serif text-2xl mb-4">Filters</h2>
+    <div className="shopx-layout">
+      <aside className="shopx-sidebar">
+        <div className="shopx-filter-head">
+          <h2 className="title-serif">Filters</h2>
+          <button onClick={clearFilters} disabled={loading} className="btn-outline">
+            Reset
+          </button>
+        </div>
 
         <label className="filter-label">Search</label>
-        <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} className="filter-input"/>
+        <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} className="filter-input" placeholder="Search by name"/>
 
         <label className="filter-label">Max Price / Day</label>
-        <input type="number" min="0" value={maxPrice} onChange={(e)=>setMaxPrice(e.target.value)} className="filter-input"/>
+        <input type="number" min="0" value={maxPrice} onChange={(e)=>setMaxPrice(e.target.value)} className="filter-input" placeholder="e.g. 2500"/>
 
         <label className="filter-label">Size Measurement</label>
         <select value={size} onChange={(e)=>setSize(e.target.value)} className="filter-select">
@@ -175,35 +179,34 @@ return (
           In stock only
         </label>
 
-        <button onClick={clearFilters} disabled={loading} className="btn-brand w-full">
-          {loading ? "Loading..." : "Clear Filters"}
+        <button onClick={refreshClothes} disabled={loading} className="btn-brand w-full">
+          {loading ? "Updating..." : "Apply Filters"}
         </button>
       </aside>
 
-      {/* PRODUCTS */}
-      <section className="products-section">
-        <div className="results-bar">
-          {loading ? "Loading products..." : `${totalItems} product(s) found`}
+      <section className="shopx-results">
+        <div className="shopx-results-bar">
+          <p>{loading ? "Loading products..." : `${totalItems} product(s) found`}</p>
+          <span>Page {page} of {Math.max(1, totalPages)}</span>
         </div>
 
-        <div className="product-grid">
+        <div className="shopx-grid">
           {error && <p className="msg-error">{error}</p>}
           {!error && !loading && items.length === 0 && <p className="msg-empty">No clothes found for these filters.</p>}
           {!error && items.map(item => <Productcard key={item._id} item={item} refreshClothes={refreshClothes} />)}
         </div>
 
         {!error && totalPages > 1 && (
-          <div className="pagination">
+          <div className="shopx-pagination">
             <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={loading||page===1} className="page-btn">Prev</button>
             <span className="text-sm">Page {page} of {totalPages}</span>
             <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={loading||page===totalPages} className="page-btn">Next</button>
           </div>
         )}
       </section>
-
     </div>
   </div>
 );
 }
 
-export default Home;
+export default Shop;

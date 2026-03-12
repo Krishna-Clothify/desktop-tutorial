@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import api from "../services/api";
 import { rentCloth } from "../services/rentalService";
 import { addToCart } from "../features/cartSlice";
+import { resolveMediaUrl, resolvePrimaryImage } from "../utils/media";
 
 const fitHighlights = {
   upper: ["Tailored upper silhouette", "Shoulder and chest fit optimized", "Best for formal layering"],
@@ -271,12 +272,12 @@ function ClothDetails() {
                   className={`pdp-amz-thumb ${activeImage === img ? "active" : ""}`}
                   onClick={() => setSelectedImage(img)}
                 >
-                  <img src={`http://localhost:5000${img}`} alt={`${cloth.name} ${idx + 1}`} />
+                  <img src={resolveMediaUrl(img)} alt={`${cloth.name} ${idx + 1}`} />
                 </button>
               ))}
             </div>
             <div className="pdp-amz-media">
-              <img src={`http://localhost:5000${activeImage}`} alt={cloth.name} />
+              <img src={resolveMediaUrl(activeImage)} alt={cloth.name} />
               {canSlide && (
                 <>
                   <button type="button" className="pdp-gallery-nav pdp-gallery-prev" onClick={goToPrevImage}>
@@ -626,7 +627,7 @@ function ClothDetails() {
         <div className="pdp-related-grid">
           {relatedItems.map((item) => (
             <Link key={item._id} to={`/cloth/${item._id}`} className="pdp-mini-card">
-              <img src={`http://localhost:5000${item.image}`} alt={item.name} />
+              <img src={resolveMediaUrl(resolvePrimaryImage(item))} alt={item.name} />
               <div>
                 <p>{item.name}</p>
                 <strong>Rs {item.pricePerDay}/day</strong>

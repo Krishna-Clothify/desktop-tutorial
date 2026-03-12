@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import { fitProfiles } from "../config/fitProfiles";
+import { resolveMediaUrl } from "../utils/media";
 
 const ALLOWED_FITS = new Set(["upper", "lower", "full", "footwear", "free"]);
 
@@ -315,7 +316,7 @@ function EditCloth() {
 
           {(imagePreview || currentImage) && (
             <div className="adminx-preview">
-              <img src={imagePreview || `http://localhost:5000${currentImage}`} alt="Preview" />
+              <img src={imagePreview || resolveMediaUrl(currentImage)} alt="Preview" />
             </div>
           )}
           {(currentGallery.length > 0 || galleryPreviews.length > 0) && (
@@ -329,7 +330,7 @@ function EditCloth() {
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => onDropAt(idx)}
                 >
-                  <img src={`http://localhost:5000${src}`} alt={`Current ${idx + 1}`} />
+                  <img src={resolveMediaUrl(src)} alt={`Current ${idx + 1}`} />
                   <div className="adminx-gallery-actions">
                     <button type="button" onClick={() => moveImage(idx, -1)} disabled={idx === 0}>
                       Left
